@@ -2,7 +2,7 @@ import {youtube} from "@googleapis/youtube"
 import Video from '../../models/video'
 import dbConnect from '../../lib/dbConnect'
 
-export default async (req, res) => {
+export default async function(req, res) {
   try {
     if (req.method === 'POST') {
 
