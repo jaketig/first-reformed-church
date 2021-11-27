@@ -1,30 +1,21 @@
-import {youtube} from "@googleapis/youtube"
+import video from '../models/video'
+import dbConnect from "../lib/dbConnect";
 
-export default function Video({videos}) {
+export default function Video({video}) {
   return (
-    <pre>{JSON.stringify(videos, undefined, 2)}</pre>
+    <pre>{JSON.stringify(video, undefined, 2)}</pre>
   )
 }
 
 export async function getStaticProps() {
+  await dbConnect();
 
-  //setup youtube client
-  const client = await youtube({
-    version: 'v3',
-    auth: process.env.YOUTUBE_API_KEY
-  })
-
-  //download last 5 videos from youtube
-  const resp = await client.search.list({
-    part: 'snippet',
-    channelId: process.env.YOUTUBE_CHANNEL_ID,
-    order: 'date'
-  })
+  const latestVideo = await video.findOne({}).sort({publishedAt: -1}).lean();
 
   return {
     props: {
-      videos: resp?.data?.items || []
+      video: latestVideo
     },
-    revalidate: 3600
+    revalidate: 60
   }
 }
