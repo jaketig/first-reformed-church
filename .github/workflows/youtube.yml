@@ -1,7 +1,7 @@
 name: update-live-stream
 on:
   schedule:
-   - cron: '*/5 14-16 * * *'  # Every 5 minutes from 9AM - 11AM EST
+   - cron: '* 14-16 * * *'  # Every minute from 9AM - 11AM EST
    - cron: '0 13,17-23,00-01 * * *'  # Every 1 hour from 8AM to 8PM EST
 jobs:
   cron:
