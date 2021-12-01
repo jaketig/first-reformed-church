@@ -1,18 +1,8 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import Link from 'next/link'
 
-const pages = ['Home', 'About', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Header = () => {
@@ -76,11 +66,17 @@ const Header = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+              <Link href={"/members"} passHref>
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">Members</Typography>
                 </MenuItem>
-              ))}
+              </Link>
+
+              {/*{pages.map((page) => (*/}
+              {/*  <MenuItem key={page} onClick={handleCloseNavMenu}>*/}
+              {/*    <Typography textAlign="center">{page}</Typography>*/}
+              {/*  </MenuItem>*/}
+              {/*))}*/}
             </Menu>
           </Box>
           <Typography
@@ -92,15 +88,32 @@ const Header = () => {
             FRC
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            <Link href={"/"} passHref>
               <Button
-                key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                Home
               </Button>
-            ))}
+            </Link>
+            <Link href={"/members"} passHref>
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Members
+              </Button>
+            </Link>
+
+            {/*{pages.map((page) => (*/}
+            {/*  <Button*/}
+            {/*    key={page}*/}
+            {/*    onClick={handleCloseNavMenu}*/}
+            {/*    sx={{ my: 2, color: 'white', display: 'block' }}*/}
+            {/*  >*/}
+            {/*    {page}*/}
+            {/*  </Button>*/}
+            {/*))}*/}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
