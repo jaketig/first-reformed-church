@@ -69,30 +69,22 @@ export default async function UpdateYoutube(req, res) {
             });
           }
 
-          res.status(200);
-          res.json({success: true, itemsUpdated: resp.data.items.length});
-          res.end();
+          return res.status(200).json({success: true, itemsUpdated: resp.data.items.length});
         }
         else {
-          res.status(500);
-          res.json({success: false, message: 'No videos returned from YouTube'});
-          res.end();
+          return res.status(500).json({success: false, message: 'No videos returned from YouTube'});
+
         }
       } else {
-        res.status(401);
-        res.json({ success: false, message: 'Unauthorized' });
-        res.end();
+        return res.status(401).json({ success: false, message: 'Unauthorized' });
       }
     }
     else {
       res.setHeader('Allow', 'POST');
-      res.status(405);
-      res.json({ success: false, message: 'Method not allowed' });
-      res.end();
+      return res.status(405).json({ success: false, message: 'Method not allowed' });
     }
   } catch (err) {
     res.status(500);
-    res.json({success: false, itemsUpdated: 0});
-    res.end();
+    return res.json({success: false, itemsUpdated: 0});
   }
 }

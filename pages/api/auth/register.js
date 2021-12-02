@@ -1,21 +1,36 @@
 import { withSessionRoute } from '../../../lib/auth'
+import bcrypt from 'bcrypt'
+import User from '../../../models/user'
+import dbConnect from '../../../lib/dbConnect'
+
 
 async function registerRoute(req, res) {
-  const { email, password } = await req.body
+  await dbConnect();
 
   try {
-    //todo create user in mongo
 
-    const user = {
-      isLoggedIn: true,
-      email: email
-    }
+    //make sure a user does not exist with this email
+    if (await User.findOne({email: req.body.email}))
+      return res.status(400).json({message: "An account with this email already exists!"})
+
+    const salt = await bcrypt.genSalt(10);
+
+    const user = await User.create({
+      name: req.body.name,
+      email: req.body.email,
+      password: await bcrypt.hash(req.body.password, salt),
+      roles: [],
+      failedLoginAttempts: 0,
+      lastLogin: new Date(),
+    })
+
+    delete user.password;
 
     req.session.user = user
     await req.session.save()
-    res.json(user)
+    return res.json(user)
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message })
   }
 }
 

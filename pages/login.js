@@ -4,16 +4,14 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui';
 import fetchJson, { FetchError } from '../lib/fetchJson'
-import {AppBar, Box, Card, CardContent, Container, Grid, Tab, Tabs, Typography} from "@mui/material";
+import {AppBar, Box, Button, Card, Container, Grid, Tab, Tabs, Typography} from "@mui/material";
 import {Alert, TabPanel} from "@mui/lab";
+import {useRouter} from "next/router";
 
 export default function Login() {
   // here we just check if user is already logged in and redirect to profile
-  const { mutateUser } = useUser({
-    redirectTo: '/members',
-    redirectIfFound: true,
-  })
-
+  const { mutateUser } = useUser();
+  const router = useRouter();
   const [tab, setTab] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -37,13 +35,15 @@ export default function Login() {
 
     const handleSubmit = async (values, { setSubmitting }) => {
       try {
-        mutateUser(
+        await mutateUser(
           await fetchJson('/api/auth/login', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(values),
           })
         )
+
+        await router.push('/members')
       } catch (error) {
         if (error instanceof FetchError) {
           setError(error.data.message)
@@ -101,8 +101,7 @@ export default function Login() {
                 />
               </Grid>
               <Grid item xs={6}>
-                <LoadingButton
-                  loading={isSubmitting}
+                <Button
                   variant="text"
                   color="primary"
                   fullWidth
@@ -110,7 +109,7 @@ export default function Login() {
                   onClick={submitForm}
                 >
                   Forgot Password
-                </LoadingButton>
+                </Button>
               </Grid>
               <Grid item xs={6}>
                 <LoadingButton
@@ -147,7 +146,7 @@ export default function Login() {
 
       if (!values.password) {
         errors.password = 'Password is required';
-      } else if (values.password.length > 6) {
+      } else if (values.password.length < 6) {
         errors.password = 'Password must be at least 6 characters'
       } else if (values.password !== values.confirmPassword) {
         errors.confirmPassword = 'Passwords must match!'
@@ -155,7 +154,7 @@ export default function Login() {
 
       if (!values.name) {
         errors.name = 'Name is required';
-      } else if (values.name.length > 3) {
+      } else if (values.name.length < 3) {
         errors.name = 'Name must be at least 3 characters'
       } else if (!values.name.includes(" ")) {
         errors.name = 'Please enter your first and last name'
@@ -166,13 +165,15 @@ export default function Login() {
 
     const handleSubmit = async (values, { setSubmitting }) => {
       try {
-        mutateUser(
+        await mutateUser(
           await fetchJson('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values),
           })
         )
+
+        await router.push('/members')
       } catch (error) {
         if (error instanceof FetchError) {
           setError(error.data.message)

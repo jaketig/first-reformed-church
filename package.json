@@ -17,6 +17,7 @@
     "@mui/lab": "^5.0.0-alpha.57",
     "@mui/material": "^5.2.1",
     "babel-plugin-superjson-next": "^0.4.2",
+    "bcrypt": "^5.0.1",
     "formik": "^2.2.9",
     "formik-mui": "^4.0.0-alpha.3",
     "iron-session": "^6.0.3",

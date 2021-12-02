@@ -1,21 +1,35 @@
 import { withSessionRoute } from '../../../lib/auth'
+import bcrypt from 'bcrypt'
+import User from '../../../models/user'
+import dbConnect from '../../../lib/dbConnect'
 
 async function loginRoute(req, res) {
-  const { email, password } = await req.body
+  await dbConnect();
 
   try {
-    //todo verify user in mongo
+    const user = await User.findOne({email: req.body.email})
 
-    const user = {
-      isLoggedIn: true,
-      email: email
+    if (!user || !await bcrypt.compare(req.body.password, user.password)) {
+
+      if (user) {
+        user.failedLoginAttemps += 1;
+        await user.save();
+      }
+
+      return res.status(403).json({ message: "Invalid username or password"})
     }
+
+    user.failedLoginAttemps = 0;
+    user.lastLogin = new Date();
+    await user.save();
+
+    delete user.password;
 
     req.session.user = user
     await req.session.save()
-    res.json(user)
+    return res.json(user)
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message })
   }
 }
 
