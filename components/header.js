@@ -1,13 +1,16 @@
 import * as React from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Link } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Link from 'next/link'
-
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import NextLink from 'next/link'
+import { useUser } from '../lib/auth'
+import StringAvatar from "./StringAvatar";
+import fetchJson from "../lib/fetchJson";
 
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const { user, mutateUser } = useUser({allowAnonymous: true})
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -24,20 +27,26 @@ const Header = () => {
     setAnchorElUser(null);
   };
 
+  const handleLogout = async (event) => {
+    event.preventDefault();
+    handleCloseUserMenu();
+    await mutateUser(
+      await fetchJson("/api/auth/logout", { method: "POST" }),
+      false,
+    );
+  }
+
   return (
     <AppBar position="static" sx={{mb:2}}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-          >
-            FRC
-          </Typography>
+        <Toolbar disableGutters sx={{justifyContent: 'space-between'}}>
+          <NextLink href={"/"} passHref>
+            <Link variant="h6" component="a" underline="none" noWrap color="inherit" sx={{mr: 2, display: { xs: 'none', md: 'flex'}}}>
+              FRC
+            </Link>
+          </NextLink>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -66,11 +75,11 @@ const Header = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <Link href={"/members"} passHref>
+              <NextLink href={"/members"} passHref>
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">Members</Typography>
                 </MenuItem>
-              </Link>
+              </NextLink>
 
               {/*{pages.map((page) => (*/}
               {/*  <MenuItem key={page} onClick={handleCloseNavMenu}>*/}
@@ -79,31 +88,28 @@ const Header = () => {
               {/*))}*/}
             </Menu>
           </Box>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-          >
-            FRC
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Link href={"/"} passHref>
+          <NextLink href={"/"} passHref>
+            <Link variant="h6" component="a" underline="none" noWrap color="inherit" sx={{ display: { xs: 'flex', md: 'none' }}}>
+              FRC
+            </Link>
+          </NextLink>
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <NextLink href={"/"} passHref>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Home
               </Button>
-            </Link>
-            <Link href={"/members"} passHref>
+            </NextLink>
+            <NextLink href={"/members"} passHref>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Members
               </Button>
-            </Link>
+            </NextLink>
 
             {/*{pages.map((page) => (*/}
             {/*  <Button*/}
@@ -116,14 +122,16 @@ const Header = () => {
             {/*))}*/}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+
+          {user && user.isLoggedIn &&
+            <Box>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Jake Tigchelaar" src="/static/images/avatar/2.jpg" />
+              <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                <StringAvatar name={user.name}/>
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{mt: '45px'}}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -138,13 +146,23 @@ const Header = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleLogout}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
+          }
+
+          {(!user || !user.isLoggedIn) &&
+          <NextLink href={"/login"} passHref>
+            <Button
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Login
+            </Button>
+          </NextLink>
+          }
+
         </Toolbar>
       </Container>
     </AppBar>

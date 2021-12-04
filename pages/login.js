@@ -113,6 +113,7 @@ export default function Login() {
               </Grid>
               <Grid item xs={6}>
                 <LoadingButton
+                  type="submit"
                   loading={isSubmitting}
                   variant="contained"
                   color="primary"
@@ -255,6 +256,7 @@ export default function Login() {
               </Grid>
               <Grid item xs={12}>
                 <LoadingButton
+                  type="submit"
                   loading={isSubmitting}
                   variant="contained"
                   color="primary"
