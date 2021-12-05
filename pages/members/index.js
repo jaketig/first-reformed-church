@@ -1,10 +1,8 @@
-import {
-  Alert,
-  Typography,
-  Grid,
-} from '@mui/material'
 import useAuth from '../../lib/auth/useAuth'
 import MembersLayout from "../../components/MembersLayout";
+import Calendar from "../../components/Calendar";
+import Announcements from "../../components/Announcements";
+import {Grid} from "@mui/material";
 
 function Members() {
   const { user } = useAuth()
@@ -12,21 +10,12 @@ function Members() {
   return (
     <>
       { user && user.isLoggedIn &&
-        <Grid container>
-          {!(user.roles || []).includes("member") &&
-            <Grid item xs={12}>
-              <Alert severity={"warning"}>
-                <Typography>
-                  <b>Limited Access</b> - You may not access confidential information until your account has been verified.
-                </Typography>
-              </Alert>
-            </Grid>
-          }
-          <Grid item>
-            Members Area
-            <p>Hello {user?.name}</p>
-
-            <pre>{JSON.stringify(user, undefined,2)}</pre>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Calendar/>
+          </Grid>
+          <Grid item xs={12}>
+            <Announcements/>
           </Grid>
         </Grid>
       }

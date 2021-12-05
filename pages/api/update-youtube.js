@@ -1,5 +1,5 @@
 import {youtube} from "@googleapis/youtube"
-import Video from '../../models/video'
+import Video from '../../models/Video'
 import dbConnect from '../../lib/dbConnect'
 
 // this is called by a CRON job on a raspberry pi

@@ -1,6 +1,6 @@
 import { withSessionRoute } from '../../../lib/auth/IronSessionConfig'
 import bcrypt from 'bcrypt'
-import User from '../../../models/user'
+import User from '../../../models/User'
 import dbConnect from '../../../lib/dbConnect'
 
 

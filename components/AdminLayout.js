@@ -1,6 +1,5 @@
 import {
   Container,
-  Divider,
   Grid,
   List,
   ListItem,
@@ -11,29 +10,30 @@ import {
 } from "@mui/material";
 import {useRouter} from 'next/router'
 import Link from 'next/link'
+import CampaignIcon from '@mui/icons-material/Campaign';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import ChurchIcon from '@mui/icons-material/Church';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import useAuth from "../lib/auth/useAuth";
 
-export default function MembersLayout ({children}) {
+export default function AdminLayout ({children}) {
   const router = useRouter()
-  const { user } = useAuth()
+  const { user } = useAuth({requiredRole: 'admin'})
 
   return (
     <Container sx={{height: '100%'}}>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={'auto'} sx={{width: {sm: '250px'} }}>
+        <Grid item width={250}>
           <Paper>
             <nav aria-label="main mailbox folders">
               <List>
-                <Link href={"/members"} passHref>
-                  <ListItem disablePadding selected={router.pathname === '/members'}>
+                <Link href={"/admin/announcements"} passHref>
+                  <ListItem disablePadding selected={router.pathname === "/admin/announcements"}>
                     <ListItemButton>
                       <ListItemIcon>
-                        <ChurchIcon />
+                        <CampaignIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Members" />
+                      <ListItemText primary="Announcements" />
                     </ListItemButton>
                   </ListItem>
                 </Link>
@@ -48,22 +48,22 @@ export default function MembersLayout ({children}) {
                 </ListItem>
 
                 {user && (user?.roles || []).includes("admin") &&
-                  <Link href="/admin" passHref>
-                    <ListItem disablePadding>
-                      <ListItemButton>
-                        <ListItemIcon>
-                          <AdminPanelSettingsIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Admin Panel" />
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
+                <Link href="/admin" passHref>
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <ListItemIcon>
+                        <AdminPanelSettingsIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Admin Panel" />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
                 }
               </List>
             </nav>
           </Paper>
         </Grid>
-        <Grid item xs={12} sm sx={{flexGrow: '1!important'}}>
+        <Grid item>
           {children}
         </Grid>
       </Grid>
