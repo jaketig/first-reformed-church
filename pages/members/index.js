@@ -24,7 +24,7 @@ function Members() {
           }
           <Grid item>
             Members Area
-            <p>Hello {user?.email}</p>
+            <p>Hello {user?.name}</p>
 
             <pre>{JSON.stringify(user, undefined,2)}</pre>
           </Grid>
