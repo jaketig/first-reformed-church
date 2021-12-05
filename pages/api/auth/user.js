@@ -1,6 +1,6 @@
 import { withSessionRoute } from '../../../lib/auth/IronSessionConfig'
 import dbConnect from "../../../lib/dbConnect";
-import User from "../../../models/user";
+import User from "../../../models/User";
 
 async function userRoute(req, res) {
   console.log('fetching user')
