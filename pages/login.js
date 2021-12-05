@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { useUser } from '../lib/auth'
+import useAuth from '../lib/auth/useAuth'
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui';
@@ -10,7 +10,7 @@ import {useRouter} from "next/router";
 
 export default function Login() {
   // here we just check if user is already logged in and redirect to profile
-  const { mutateUser } = useUser();
+  const { mutateUser } = useAuth();
   const router = useRouter();
   const [tab, setTab] = useState(0);
 

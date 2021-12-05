@@ -2,15 +2,14 @@ import * as React from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Link } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import NextLink from 'next/link'
-import { useUser } from '../lib/auth'
+import useAuth  from '../lib/auth/useAuth'
 import StringAvatar from "./StringAvatar";
-import fetchJson from "../lib/fetchJson";
 
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const { user, mutateUser } = useUser({allowAnonymous: true})
+  const { user, logout } = useAuth({allowAnonymous: true})
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -30,10 +29,7 @@ const Header = () => {
   const handleLogout = async (event) => {
     event.preventDefault();
     handleCloseUserMenu();
-    await mutateUser(
-      await fetchJson("/api/auth/logout", { method: "POST" }),
-      false,
-    );
+    await logout();
   }
 
   return (

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { Container } from '@mui/material'
-import Video from '../components/video'
+import Video from '../components/Video'
 import dbConnect from "../lib/dbConnect";
 import video from "../models/video";
 

@@ -1,4 +1,4 @@
-import { withSessionRoute } from '../../../lib/auth'
+import { withSessionRoute } from '../../../lib/auth/IronSessionConfig'
 import bcrypt from 'bcrypt'
 import User from '../../../models/user'
 import dbConnect from '../../../lib/dbConnect'

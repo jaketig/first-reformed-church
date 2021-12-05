@@ -1,8 +1,10 @@
-import { withSessionRoute } from '../../../lib/auth'
+import { withSessionRoute } from '../../../lib/auth/IronSessionConfig'
 import dbConnect from "../../../lib/dbConnect";
 import User from "../../../models/user";
 
 async function userRoute(req, res) {
+  console.log('fetching user')
+
   await dbConnect();
 
   if (req.session.user) {

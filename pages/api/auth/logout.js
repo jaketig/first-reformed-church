@@ -1,4 +1,4 @@
-import { withSessionRoute } from '../../../lib/auth'
+import { withSessionRoute } from '../../../lib/auth/IronSessionConfig'
 
 function logoutRoute(req, res, session) {
   req.session.destroy();
