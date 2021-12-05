@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Container } from '@mui/material'
 import Video from '../components/Video'
 import dbConnect from "../lib/dbConnect";
-import video from "../models/video";
+import video from "../models/Video";
 
 export default function Home({latestVideo}) {
   return (
