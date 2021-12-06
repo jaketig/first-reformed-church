@@ -20,10 +20,17 @@ const CalendarEventSchema = new mongoose.Schema({
   endDate: {
     type: Date,
   },
-  recursEvery: {
-    type: String,
-    enum: ['never', 'day', 'week', '2week', 'month', 'year'],
-    required: true,
+  recurrence: {
+    type: Object,
+    properties: {
+      interval: {
+        type: String,
+        enum: [ 'day', 'week', 'month', 'year']
+      },
+      numIntervals: {
+        type: Number
+      }
+    }
   },
   visibility: {
     type: String,

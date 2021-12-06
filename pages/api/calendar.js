@@ -1,6 +1,10 @@
 import dbConnect from '../../lib/dbConnect'
 import CalendarEvent from "../../models/CalendarEvent";
 import {withSessionRoute} from "../../lib/auth/IronSessionConfig";
+import dayjs from 'dayjs'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
+
+dayjs.extend(weekOfYear)
 
 async function CalendarEvents(req, res) {
   //connect to mongo
@@ -25,20 +29,57 @@ async function CalendarEvents(req, res) {
 
       //get list of events
       const events = await CalendarEvent.find({
-        startDate: { $gte: body.startDate},
         $or: [
-          {endDate: { $lt: body.endDate }},
-          {endDate: { $exists: false }},
-          {endDate: null},
+          {startDate: { $gte: body.startDate}},
+          { $or: [
+            {endDate: { $lt: body.endDate }},
+            {endDate: { $exists: false }},
+            {endDate: null},
+          ]}
         ],
 
         visibility: { $in: visibility }
       }).lean()
 
-      //handle recurrence
-      console.log(events)
+      const occurrences = []
 
-      res.json(events)
+      events.map((event) => {
+
+        if (event?.recurrence) {
+          const eventStartDate = dayjs(event.startDate);
+          const calendarStartDate = dayjs(body.startDate);
+          const calendarEndDate = dayjs(body.endDate);
+
+          const diff = calendarStartDate.diff(eventStartDate, event.recurrence.interval) % event.recurrence.numIntervals
+
+          console.log(diff)
+
+          let curr = diff > 0 ? dayjs(event.startDate).add(diff, event.recurrence.interval) : dayjs(event.startDate)
+          console.log(curr.toDate())
+
+
+          while (!curr.isAfter(calendarEndDate, event.recurrence.interval)) {
+            console.log(curr.toDate())
+            const newEvent = {...event, date: curr};
+            delete newEvent.startDate;
+            delete newEvent.endDate;
+
+            occurrences.push(newEvent)
+
+            curr = curr.add(event.recurrence.numIntervals, event.recurrence.interval)
+          }
+
+        } else {
+          event.date = event.startDate;
+          delete event.startDate;
+          delete event.endDate;
+
+          occurrences.push(event)
+        }
+
+      })
+
+      res.json(occurrences)
     }
     else {
       res.setHeader('Allow', 'POST');
