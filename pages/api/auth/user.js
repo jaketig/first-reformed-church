@@ -3,8 +3,6 @@ import dbConnect from "../../../lib/dbConnect";
 import User from "../../../models/User";
 
 async function userRoute(req, res) {
-  console.log('fetching user')
-
   await dbConnect();
 
   if (req.session.user) {

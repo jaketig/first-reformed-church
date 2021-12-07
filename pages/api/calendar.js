@@ -51,16 +51,10 @@ async function CalendarEvents(req, res) {
           const calendarEndDate = dayjs(body.endDate);
 
           const diff = calendarStartDate.diff(eventStartDate, event.recurrence.interval) % event.recurrence.numIntervals
-
-          console.log(diff)
-
           let curr = diff > 0 ? dayjs(event.startDate).add(diff, event.recurrence.interval) : dayjs(event.startDate)
-          console.log(curr.toDate())
-
 
           while (!curr.isAfter(calendarEndDate, event.recurrence.interval)) {
-            console.log(curr.toDate())
-            const newEvent = {...event, date: curr};
+            const newEvent = {...event, date: curr.toDate()};
             delete newEvent.startDate;
             delete newEvent.endDate;
 

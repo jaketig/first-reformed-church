@@ -12,10 +12,10 @@ function Members() {
       { user && user.isLoggedIn &&
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Calendar/>
+            <Announcements/>
           </Grid>
           <Grid item xs={12}>
-            <Announcements/>
+            <Calendar/>
           </Grid>
         </Grid>
       }
