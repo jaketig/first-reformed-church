@@ -24,7 +24,7 @@ async function CalendarEvents(req, res) {
 
       //only return events user has permission to see
       let visibility = ['public']
-      if ((req?.session?.roles || []).includes('member'))
+      if ((req?.session?.user?.roles || []).includes('member'))
         visibility.push('member')
 
       //get list of events

@@ -4,7 +4,7 @@ function Announcements() {
 
   return (
     <>
-      Announcements
+      Announcement Management
     </>
   )
 }
