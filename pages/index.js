@@ -3,8 +3,11 @@ import { Container } from '@mui/material'
 import Video from '../components/Video'
 import dbConnect from "../lib/dbConnect";
 import video from "../models/Video";
+import HomepageHero from "../components/HomepageHero";
 
-export default function Home({latestVideo}) {
+
+
+function Home({latestVideo}) {
   return (
     <>
       <Head>
@@ -13,7 +16,12 @@ export default function Home({latestVideo}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <HomepageHero/>
+
+
       <Container>
+
+
         <Video video={latestVideo}></Video>
       </Container>
     </>
@@ -32,3 +40,7 @@ export async function getStaticProps() {
     revalidate: 60
   }
 }
+
+Home.HasHero = true;
+
+export default Home;

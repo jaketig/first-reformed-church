@@ -7,10 +7,11 @@ const emptyLayout = ({children}) => {
 
 export default function Layout({ Component, children }) {
   const NestedLayout = Component.Layout || emptyLayout;
+  const hasHero = Component.HasHero || false;
 
   return (
     <>
-      <Header />
+      <Header hasHero={hasHero} />
       <NestedLayout>
         <main>{children}</main>
       </NestedLayout>
