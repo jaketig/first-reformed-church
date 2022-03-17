@@ -3,7 +3,8 @@ import { Container } from '@mui/material'
 import Video from '../components/Video'
 import dbConnect from "../lib/dbConnect";
 import video from "../models/Video";
-import HomepageHero from "../components/HomepageHero";
+import Hero from "../components/homepage/Hero";
+import MissionStatement from "../components/homepage/MissionStatement";
 
 
 
@@ -16,7 +17,8 @@ function Home({latestVideo}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <HomepageHero/>
+      <Hero/>
+      <MissionStatement/>
 
 
       <Container>

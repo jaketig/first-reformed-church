@@ -22,9 +22,6 @@ import StringAvatar from "./StringAvatar";
 
 
 function ScrollHandler(props) {
-
-  console.log(props)
-
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 75
@@ -42,10 +39,7 @@ function ScrollHandler(props) {
   });
 }
 
-
 function Header(props) {
-
-
   const theme = useTheme();
 
   const styles = {

@@ -1,7 +1,7 @@
 import {Box, Container, Typography} from "@mui/material";
 import Image from "next/image";
 
-export default function HomepageHero() {
+export default function Hero() {
   const styles = {
     wrapper: {
       display: "flex",
